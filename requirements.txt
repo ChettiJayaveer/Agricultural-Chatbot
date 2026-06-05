@@ -1,0 +1,12 @@
+flask
+flask_sqlalchemy
+flask_bcrypt
+python-dotenv
+google-genai
+langchain
+langchain_google_genai
+pypdf
+chromadb
+sentence-transformers
+langchain-community
+langchain-openai
