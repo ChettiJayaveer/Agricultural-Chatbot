@@ -1,0 +1,243 @@
+/* --- 1. THEME VARIABLES (Gold, Brown, Green, Black) --- */
+:root {
+    --gold: #D4AF37;         /* Harvest Gold */
+    --soil-brown: #582f0e;   /* Deep Soil Brown */
+    --agri-green: #2d6a4f;   /* Growth Green */
+    --deep-black: #1a1a1a;   /* Rich Black */
+    --cream-bg: #fdfaf5;     /* Soft Background */
+    --shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+/* --- 2. GLOBAL RESET & FONTS --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background-color: var(--cream-bg);
+    color: var(--deep-black);
+}
+
+/* --- 3. BACKGROUND HERO SECTIONS --- */
+.home-hero, .auth-container {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+.home-hero {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.75), rgba(88, 47, 14, 0.6)), url('/static/images/landing_hero.jpg');
+}
+
+.auth-container {
+    background-image: linear-gradient(rgba(26, 26, 26, 0.85), rgba(212, 175, 55, 0.15)), url('/static/images/Home_bg.jpg');
+}
+
+/* --- 4. HOME PAGE & AUTH CARD STYLING --- */
+.home-content, .auth-box {
+    background: white;
+    padding: 50px;
+    border-radius: 20px;
+    width: 90%;
+    max-width: 750px;
+    box-shadow: var(--shadow);
+    border-top: 10px solid var(--gold);
+    text-align: center;
+}
+
+.auth-box { max-width: 450px; border: 2px solid var(--gold); }
+
+/* Logo: Bold but Screen-Compliant */
+.main-logo {
+    width: 100%;
+    max-width: 380px;
+    height: auto;
+    margin: 0 auto 25px;
+    display: block;
+}
+
+/* Home Text Hierarchy */
+.home-content h1 { color: var(--agri-green); font-size: 3rem; font-weight: 800; margin-bottom: 5px; }
+.caption { display: block; color: var(--soil-brown); font-size: 1.25rem; font-style: italic; margin-bottom: 35px; }
+.home-content h2 { color: var(--deep-black); font-size: 1.8rem; margin-bottom: 20px; border-bottom: 3px solid var(--gold); display: inline-block; }
+
+/* Justified Matter */
+.about-card p {
+    text-align: justify;
+    text-justify: inter-word;
+    line-height: 1.9;
+    color: var(--deep-black);
+    font-size: 1.1rem;
+    margin-bottom: 40px;
+}
+
+/* --- 5. BUTTONS & INPUTS --- */
+.btn-agri {
+    width: 100%;
+    height: 55px;
+    background: var(--agri-green);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.btn-agri:hover { background: var(--soil-brown); transform: translateY(-2px); }
+
+input[type="text"], input[type="email"], input[type="password"], input[type="file"] {
+    width: 100%;
+    height: 52px;
+    padding: 0 15px;
+    margin-bottom: 20px;
+    border-radius: 12px;
+    border: 2px solid var(--soil-brown);
+    background: #fffdfa;
+    transition: 0.3s;
+}
+
+input:focus { border-color: var(--gold); outline: none; }
+
+/* --- 6. INDEX (CHAT) PAGE: SIDEBAR & MESSAGES --- */
+.chat-wrapper { display: flex; height: 100vh; overflow: hidden; }
+
+.sidebar {
+    width: 350px;
+    background: var(--deep-black);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    border-right: 8px solid var(--soil-brown);
+}
+
+/* UP: Profile, City, & Signout */
+.profile-section {
+    text-align: center;
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+.profile-img {
+    width: 110px; height: 110px; border-radius: 50%;
+    border: 4px solid var(--gold); margin: 0 auto 10px;
+    display: block; object-fit: cover;
+}
+.user-name { font-weight: 600; font-size: 1.3rem; color: white; }
+.city-label { font-size: 0.9rem; color: var(--gold); margin-top: 5px; font-weight: 500; }
+.logout-btn { display: inline-block; margin-top: 10px; color: #ff4d4d; text-decoration: none; font-size: 0.85rem; font-weight: 600; }
+
+/* MEDIUM: Forecast (Horizontal) */
+.forecast-section {
+    height: 140px;
+    margin: 20px 0;
+    background: rgba(212, 175, 55, 0.1);
+    border-radius: 15px;
+    padding: 15px;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+/* LONG: Mandi Prices */
+.mandi-section {
+    flex: 1; /* Takes remaining long space */
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 15px;
+    padding: 15px;
+    overflow-y: auto;
+}
+
+/* CHAT AREA: ALIGNMENT */
+.chat-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background: var(--cream-bg);
+    position: relative;
+}
+
+#messageFormeight {
+    flex: 1;
+    display: flex;
+    flex-direction: column; /* Vertical stack */
+    gap: 15px;
+    padding: 30px;
+    overflow-y: auto;
+    padding-bottom: 120px;
+}
+
+/* Curved Rectangles */
+.chat-bubble {
+    max-width: 75%;
+    padding: 15px 20px;
+    line-height: 1.6;
+    border-radius: 18px;
+}
+
+/* BOT: Left Side */
+.bot-bubble {
+    align-self: flex-start;
+    background: white;
+    color: var(--deep-black);
+    border: 1px solid var(--gold);
+    border-bottom-left-radius: 2px;
+}
+
+/* USER: Right Side */
+.user-bubble {
+    align-self: flex-end; /* Pushes message to the right side */
+    background: var(--agri-green);
+    color: white;
+    border-bottom-right-radius: 2px;
+}
+
+/* --- 7. BOTTOM BAR: (Text | Send | Voice | Audio) --- */
+.input-panel {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    padding: 25px 35px;
+    background: white;
+    border-top: 2px solid var(--gold);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+#text { flex: 1; height: 52px; margin-bottom: 0; border-color: var(--soil-brown); }
+
+.btn-send {
+    height: 52px; width: 100px;
+    background: var(--agri-green);
+    color: white; border: none; border-radius: 12px;
+    font-weight: 600; cursor: pointer;
+}
+
+.icon-btn {
+    width: 52px; height: 52px;
+    background: var(--deep-black);
+    color: var(--gold);
+    border: none; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.3rem; cursor: pointer;
+}
+
+.section-label {
+    font-size: 0.75rem;
+    font-weight: bold;
+    color: var(--gold);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}

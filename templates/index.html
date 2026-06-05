@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agrigenius AI | Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+
+    <div class="chat-wrapper">
+        <div class="sidebar">
+            
+            <div class="profile-section">
+                <img src="{{ url_for('static', filename='profile_pics/' + session.get('user_pic', 'default_user.png')) }}" class="profile-img">
+                
+                <div class="user-name">Hello, {{ session.get('user_name', 'Farmer') }}</div> 
+
+                <input type="text" id="city-selector" class="sidebar-input" placeholder="Enter City..." value="Kakinada">
+                
+                <a href="/logout" class="logout-btn">Sign Out</a>
+            </div>
+
+            <div class="section-label">Hourly Forecast</div>
+            <div class="forecast-section" id="weather-box">
+                </div>
+
+            <div class="section-label">Live Mandi Prices</div>
+            <div class="mandi-section">
+                <div id="mandi-list" class="scrollable-list">
+                    </div>
+            </div>
+        </div>
+
+        <div class="chat-area">
+            <div id="messageFormeight" class="messages-container">
+                <div class="chat-bubble bot-bubble">
+                    Namaste! I am Agrigenius. Type a city in the sidebar to see the weather, or ask me a farming question.
+                </div>
+            </div>
+
+            <div class="input-panel">
+                <form id="messageArea" style="width:100%; display:flex; gap:12px; align-items:center;">
+                    
+                    <input type="text" id="text" placeholder="Ask about soil, seeds, or pests..." autocomplete="off">
+                    
+                    <button type="submit" id="send" class="btn-send">Send</button>
+                    
+                    <button type="button" id="voice-btn" class="icon-btn">🎤</button>
+                    
+                    <button type="button" id="stop-speech" class="icon-btn" style="display:none;">🔇</button>
+                    
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- 1. VOICE-TO-TEXT (STT) ---
+        const voiceBtn = document.getElementById('voice-btn');
+        const textInput = document.getElementById('text');
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+        if (SpeechRecognition) {
+            const recognition = new SpeechRecognition();
+            recognition.lang = 'en-IN';
+            recognition.continuous = false;
+
+            voiceBtn.addEventListener('click', () => {
+                recognition.start();
+                voiceBtn.style.color = "#D4AF37"; // Gold while listening
+            });
+
+            recognition.onresult = (event) => {
+                textInput.value = event.results[0][0].transcript;
+                voiceBtn.style.color = ""; 
+            };
+            recognition.onend = () => { voiceBtn.style.color = ""; };
+        }
+
+        // --- 2. TEXT-TO-SPEECH (TTS/Audio Listening) ---
+        const stopBtn = document.getElementById('stop-speech');
+        function speak(text) {
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.onstart = () => { stopBtn.style.display = "flex"; };
+            utterance.onend = () => { stopBtn.style.display = "none"; };
+            window.speechSynthesis.speak(utterance);
+        }
+
+        stopBtn.addEventListener('click', () => {
+            window.speechSynthesis.cancel();
+            stopBtn.style.display = "none";
+        });
+
+        // --- 3. DYNAMIC DASHBOARD LOADER ---
+        function loadDashboard(city) {
+            $.get("/get_dashboard?city=" + city, function(data) {
+                // Populate 5-Hour Forecast
+                let wHtml = "";
+                data.forecast.forEach(f => {
+                    wHtml += `<div class="weather-card" style="display:inline-block; margin-right:15px; text-align:center; min-width:80px;">
+                                <div style="font-size:0.75rem; color:white;">${f.time}</div>
+                                <div style="font-weight:bold; color:#D4AF37;">${f.temp}°C</div>
+                                <div style="font-size:0.65rem; color:#ccc;">${f.desc}</div>
+                              </div>`;
+                });
+                $("#weather-box").html(wHtml);
+
+                // Populate Mandi List
+                let mHtml = "";
+                data.prices.forEach(p => {
+                    mHtml += `<div class="mandi-item" style="padding:10px 0; border-bottom:1px solid rgba(255,255,255,0.1);">
+                                <div style="font-weight:600; color:white;">${p.commodity}</div>
+                                <div style="color:#D4AF37; font-size:0.85rem;">₹${p.modal_price}/Quintal</div>
+                              </div>`;
+                });
+                $("#mandi-list").html(mHtml);
+            });
+        }
+
+        $(document).ready(function() {
+            // Initial load
+            loadDashboard($("#city-selector").val());
+
+            // Handle City Change on 'Enter'
+            $("#city-selector").on("keypress", function(e) {
+                if(e.which == 13) {
+                    loadDashboard($(this).val().trim());
+                }
+            });
+
+            // Handle Chat Submission
+            $("#messageArea").on("submit", function(event) {
+                event.preventDefault();
+                var rawText = $("#text").val().trim();
+                if (!rawText) return;
+
+                // User Message (Right)
+                $("#messageFormeight").append('<div class="chat-bubble user-bubble">'+rawText+'</div>');
+                $("#text").val("");
+                scrollToBottom();
+
+                $.post("/ask", { messageText: rawText }, function(data) {
+                    // Bot Message (Left)
+                    $("#messageFormeight").append('<div class="chat-bubble bot-bubble">'+data.answer+'</div>');
+                    speak(data.answer); // Trigger Audio listening
+                    scrollToBottom();
+                });
+            });
+
+            function scrollToBottom() {
+                var container = $("#messageFormeight");
+                container.scrollTop(container[0].scrollHeight);
+            }
+        });
+    </script>
+</body>
+</html>

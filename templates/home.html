@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agrigenius AI | Welcome</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+</head>
+<body class="home-hero">
+
+    <div class="home-content">
+        <img src="{{ url_for('static', filename='images/logo.png') }}" class="main-logo" alt="Agrigenius Logo">
+
+        <h1>Agrigenius AI</h1>
+
+        <span class="caption">Cultivating the Future with Intelligent Technology</span>
+
+        <div class="about-card">
+            <h2>Our Farming Mission</h2>
+
+            <p>
+                Agrigenius is built specifically for the needs of the modern agricultural community. 
+                By combining localized weather data, real-time market prices, and expert AI 
+                consultation, we ensure that every farmer has the tools needed to succeed. 
+                Our mission is to bridge the gap between traditional wisdom and cutting-edge 
+                technology, providing a justified path to higher yields and better soil health. 
+                We believe that with the right data, every seed has the potential to transform 
+                the future of farming.
+            </p>
+        </div>
+
+        <div class="button-group">
+            <a href="/login" class="btn-agri">Get Started</a>
+            <a href="/signup" class="btn-agri btn-outline" style="margin-top: 10px;">Create Account</a>
+        </div>
+    </div>
+
+</body>
+</html>
